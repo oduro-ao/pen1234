@@ -26,7 +26,8 @@ export default function SignIn() {
   const handleSignIn = async () => {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
-      alert("check email");
+      alert("sign in successfull, connect to console from here");
+      router.push("signinPhoneNum/signin_phone_number")
     } catch (error) {
       alert('Sign in faild' + error.message);
     }
@@ -67,7 +68,7 @@ export default function SignIn() {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.forgot_passwd}>
+        <TouchableOpacity onPress={() => router.push("../forgottenPassword/forgottenPassword")} style={styles.forgot_passwd}>
           <Text style={styles.forgottxt}>Forgot your password?</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleSignIn} style={styles.button}>
@@ -75,7 +76,7 @@ export default function SignIn() {
         </TouchableOpacity>
       </View>
       <Text style={styles.signup}>
-        Don't have an account?{" "}
+        Don't have an account?
         <TouchableOpacity onPress={() => router.push("../signup/signUp")}>
           <Text style={styles.signup_text}>Sign Up</Text>
         </TouchableOpacity>

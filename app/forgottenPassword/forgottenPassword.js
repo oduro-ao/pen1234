@@ -1,7 +1,8 @@
+import { useLocalSearchParams } from "expo-router";
 import { router } from "expo-router";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import "firebase/auth";
-import {  createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 
 import React, { useState } from "react";
 import {
@@ -13,32 +14,26 @@ import {
   StyleSheet,
 } from "react-native";
 
-
-// 
-export default function SignUp() {
+export default function ForgottenPassword() {
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [retypePassword, setRetypePassword] = useState("");
   const auth = FIREBASE_AUTH;
-  const [isPasswordVisible, setIsPasswordVisible] = useState("");
 
-  const handleSignUp = async () => {
-    if (password !== retypePassword) {
-      alert("Passwords do not match.");
-      return;
-    }
+  const forgotPassword = async () => {
+    
     try {
-      const response = await createUserWithEmailAndPassword(auth, email, password );
-      alert("Sign Up Successful");
-      router.push("../number/number");
+      const response = await sendPasswordResetEmail(
+        auth,
+        email,
+ 
+      );
+      alert("password reset email sent");
+      router.push("../terms/terms");
     } catch (error) {
-      alert("Sign Up faild, Try again" + error.message);
+      alert("reset faild, Try again" + error.message);
     }
   };
-
-  
-  
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => router.push("../signin/signIn")}>
@@ -47,8 +42,8 @@ export default function SignUp() {
           source={require("../assets/backArrow.png")}
         />
       </TouchableOpacity>
-      <Text style={styles.title}>Sign Up</Text>
-      <View style={styles.signup_container}>
+      <Text style={styles.title}>Reset Password</Text>
+      <View style={styles.reset_container}>
         <TextInput
           value={email}
           onChangeText={setEmail}
@@ -56,74 +51,12 @@ export default function SignUp() {
           placeholder="Email"
         />
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.password_text}
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Password"
-            secureTextEntry={!isPasswordVisible}
-          />
-          <TouchableOpacity
-            onPress={function () {
-              setIsPasswordVisible(!isPasswordVisible);
-            }}
-            style={styles.icon}
-          >
-            <Image
-              source={
-                isPasswordVisible
-                  ? require("../assets/showPassword.png")
-                  : require("../assets/hidePassword.png")
-              }
-              style={styles.iconImage}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.password_text}
-            placeholder="Retype Password"
-            value={retypePassword}
-            onChangeText={setRetypePassword}
-            secureTextEntry={!isPasswordVisible}
-          />
-          <TouchableOpacity
-            onPress={function () {
-              setIsPasswordVisible(!isPasswordVisible);
-            }}
-            style={styles.icon}
-          >
-            <Image
-              source={
-                isPasswordVisible
-                  ? require("../assets/showPassword.png")
-                  : require("../assets/hidePassword.png")
-              }
-              style={styles.iconImage}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity onPress={handleSignUp} style={styles.button}>
+        <TouchableOpacity onPress={forgotPassword} style={styles.button}>
           <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
       </View>
-      <Text style={styles.orText}>or sign up with</Text>
-      <TouchableOpacity style={styles.googleButton}>
-        <Image
-          source={require("../assets/google.png")}
-          style={styles.googleIcon}
-        />
-        <Text style={styles.googleButtonText}>Google</Text>
-      </TouchableOpacity>
-      <Text style={styles.login}>
-        Already have an account? .
-        <TouchableOpacity onPress={() => router.push("../signin/signIn")}>
-          <Text style={styles.login_text}>Log in</Text>
-        </TouchableOpacity>
-      </Text>
+      
+      
       <View style={styles.footer}>
         <Text style={styles.footerText}>
           {currentYear} <Text style={styles.footerText_servio}>Servio.</Text>{" "}
@@ -150,7 +83,7 @@ const styles = StyleSheet.create({
     marginTop: 75,
     textAlign: "center",
   },
-  signup_container: {
+  reset_container: {
     marginTop: 60,
   },
   inputContainer: {
@@ -229,12 +162,7 @@ const styles = StyleSheet.create({
     color: "#222",
     fontWeight: "350",
   },
-  login: {
-    textAlign: "center",
-    color: "#999",
-    fontSize: 17,
-    marginTop: 80,
-  },
+  
   login_text: {
     color: "#111",
     fontSize: 17,

@@ -34,7 +34,7 @@ export default function Terms() {
             Privacy Policy
           </Text>
         </Text>
-        <TouchableOpacity style={styles.button} onPress={() => router.push("../finalpage/finalSignupPage")}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push("../signin/signIn")}>
           <Text style={styles.buttonText}>AGREE AND CONTINUE</Text>
         </TouchableOpacity>
       </View>

@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 
-export default function VerificationScreen() {
+export default function signin_phone_number_verification() {
   const currentYear = new Date().getFullYear();
 
   const [code, setCode] = useState(["", "", "", ""]);
@@ -56,7 +56,7 @@ export default function VerificationScreen() {
           .padStart(2, "0")}
         :{(resendTimer % 60).toString().padStart(2, "0")}
       </Text>
-      <TouchableOpacity onPress={() => alert("sign up complete, connect the home page from here")} style={styles.button}>
+      <TouchableOpacity onPress={() => alert("signin complete")} style={styles.button}>
         <Text style={styles.buttonText}>Next</Text>
       </TouchableOpacity>
       <View style={styles.footer}>
