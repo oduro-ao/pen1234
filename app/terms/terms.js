@@ -21,17 +21,17 @@ export default function Terms() {
         source={require("../assets/termsImage.png")}
       />
       <Text style={styles.bills}>
-        Shop everything and Pay all bills no matter where you are
+        Shop everything and pay all bills no matter where you are!
       </Text>
       <View style={styles.terms_container}>
         <Text style={styles.text}>
-          By continuing, you agree to our
+          By continuing, you agree to our 
           <Text style={styles.link} onPress={() => Linking.openURL("#")}>
-            Terms of Service
+            {" "}Terms of Service
           </Text>
-          and
+          {" "}and
           <Text style={styles.link} onPress={() => Linking.openURL("#")}>
-            Privacy Policy
+          {" "}Privacy Policy
           </Text>
         </Text>
         <TouchableOpacity style={styles.button} onPress={() => router.push("../signin/signIn")}>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   bills: {
     fontSize: 18,
     textAlign: "center",
-    padding: 70,
+    padding: 60,
     paddingTop: 26,
     paddingBottom: 0,
     fontWeight: "600",

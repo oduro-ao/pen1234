@@ -13,8 +13,6 @@ import {
 } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-
-
 export default function SignIn() {
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState("");
@@ -27,9 +25,9 @@ export default function SignIn() {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       alert("sign in successfull, connect to console from here");
-      router.push("signinPhoneNum/signin_phone_number")
+      router.push("signinPhoneNum/signin_phone_number");
     } catch (error) {
-      alert('Sign in faild' + error.message);
+      alert("Sign in faild" + error.message);
     }
   };
 
@@ -68,19 +66,22 @@ export default function SignIn() {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity onPress={() => router.push("../forgottenPassword/forgottenPassword")} style={styles.forgot_passwd}>
+        <TouchableOpacity
+          onPress={() => router.push("../forgottenPassword/forgottenPassword")}
+          style={styles.forgot_passwd}
+        >
           <Text style={styles.forgottxt}>Forgot your password?</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleSignIn} style={styles.button}>
           <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
       </View>
-      <Text style={styles.signup}>
-        Don't have an account?
-        <TouchableOpacity onPress={() => router.push("../signup/signUp")}>
-          <Text style={styles.signup_text}>Sign Up</Text>
+      <View style={styles.signup}>
+        <Text style={styles.signup1}>Don't have an account?</Text>
+        <TouchableOpacity style={styles.signup_text_container} onPress={() => router.push("../signup/signUp")}>
+          <Text style={styles.signup_text}>{" "}Sign Up</Text>
         </TouchableOpacity>
-      </Text>
+      </View>
       <View style={styles.footer}>
         <Text style={styles.footerText}>
           {currentYear} <Text style={styles.footerText_servio}>Servio.</Text>{" "}
@@ -105,6 +106,10 @@ const styles = StyleSheet.create({
   },
   signup_container: {
     marginTop: 60,
+  },
+  signup_text_container: {
+    alignItems: "center", // Centers the text horizontally
+    justifyContent: "center", // Centers the text vertically
   },
   inputContainer: {
     flexDirection: "row",
@@ -166,9 +171,14 @@ const styles = StyleSheet.create({
   },
   signup: {
     textAlign: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    
+    marginTop: 80,
+  },
+  signup1: {
     color: "#999",
     fontSize: 17,
-    marginTop: 80,
   },
   signup_text: {
     color: "#111",

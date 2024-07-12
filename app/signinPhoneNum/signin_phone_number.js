@@ -1,30 +1,39 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from "react-native";
-import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import { router } from "expo-router";
-import { signInWithPhoneNumber, RecaptchaVerifier  } from "firebase/auth";
+import { countryData } from "../countryData";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  ScrollView,
+  Image
+} from "react-native";
 
-export default function SignInPhoneNumber({ navigation }) {
+export default function Number() {
+  const [countryCode, setCountryCode] = useState("+233");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [code, setCode] = useState("");
-  const [confirm, setConfirm] = useState(null);
-  const auth = FIREBASE_AUTH;
+  const [selectedFlag, setSelectedFlag] = useState("🇬🇭");
+  const [isPickerVisible, setIsPickerVisible] = useState(false);
   const currentYear = new Date().getFullYear();
 
-
-
-  
-  
+  const handleCountrySelect = (country) => {
+    setCountryCode(country.value);
+    setSelectedFlag(country.flag);
+    setIsPickerVisible(false); 
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Enter your phone number</Text>
       <View style={styles.inputContainer}>
-        <TouchableOpacity style={styles.flagButton}>
-          <Image
-            source={require("../assets/ghana.png")}
-            style={styles.flagImage}
-          />
+        <TouchableOpacity
+          onPress={() => setIsPickerVisible(true)}
+          style={styles.flagButton}
+        >
+          <Text style={styles.flag}>{selectedFlag}</Text>
           <Image
             source={require("../assets/downArrow.png")}
             style={styles.arrowImage}
@@ -38,14 +47,34 @@ export default function SignInPhoneNumber({ navigation }) {
           keyboardType="phone-pad"
         />
       </View>
-      <TouchableOpacity
-        onPress={() => router.push("../signinPhoneNumVer/signin_phone_number_verification")}
-        style={styles.button}
-      >
+      <TouchableOpacity onPress={() => router.push("../signinPhoneNumVer/signin_phone_number_verification")} style={styles.button}>
         <Text style={styles.buttonText}>Next</Text>
       </TouchableOpacity>
-      
-      
+      <Modal visible={isPickerVisible} transparent={true} animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.pickerContainer}>
+            <ScrollView>
+              {countryData.map((item) => (
+                <TouchableOpacity
+                  key={item.value}
+                  style={styles.countryItem}
+                  onPress={() => handleCountrySelect(item)}
+                >
+                  <Text style={styles.countryText}>
+                    {item.flag} {item.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+            <TouchableOpacity
+              onPress={() => setIsPickerVisible(false)}
+              style={styles.closeButton}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.footer}>
         <Text style={styles.footerText}>
           {currentYear} <Text style={styles.footerText_servio}>Servio.</Text>
@@ -60,32 +89,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    paddingTop: 150,
     padding: 20,
   },
   title: {
     textAlign: "center",
-    fontSize: 18,
-    marginTop: 50,
+    fontSize: 22,
+    fontWeight: "400",
+    marginBottom: 70,
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    width: "100%",
-    marginTop: 50,
+    marginBottom: 20,
   },
   flagButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#93939348",
-    borderRadius: 10,
+    backgroundColor: "#f0f0f0",
+    borderRadius: 5,
     padding: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
     marginRight: 10,
   },
-  flagImage: {
-    width: 62,
-    height: 44,
+  flag: {
+    fontSize: 44,
   },
   arrowImage: {
     width: 20,
@@ -94,25 +121,59 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: 52,
+    height: 62,
     paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    fontSize: 20,
+    fontSize: 18,
   },
   button: {
     backgroundColor: "#28a745",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    width: "100%",
+    paddingVertical: 15,
+    borderRadius: 10,
     alignItems: "center",
-    marginTop: 50,
+    marginTop: 20,
   },
   buttonText: {
     color: "#fff",
-    fontSize: 20,
+    fontSize: 25,
+    fontWeight: "700",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  pickerContainer: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+    maxHeight: "50%",
+  },
+  countryItem: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    width: "100%",
+    justifyContent: "center",
+  },
+  countryText: {
+    fontSize: 18,
+  },
+  closeButton: {
+    marginTop: 20,
+    backgroundColor: "red",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontSize: 16,
   },
   footer: {
     position: "absolute",
